@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="af7c3ebf4812417e83403d1710658adf" Name="Diagram1" ZoomLevel="68">
+        <EntityTypeShape EntityType="RecursosHumanos.Personal" Width="1.5" PointX="9.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecursosHumanos.Plantilla" Width="1.5" PointX="7.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecursosHumanos.Plazas" Width="1.5" PointX="5.25" PointY="0.5" IsExpanded="true" />
+        <AssociationConnector Association="RecursosHumanos.FK_Personal_Plantilla" ManuallyRouted="false" />
+        <AssociationConnector Association="RecursosHumanos.FKPlantillaOcup" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RecursosHumanos.BajaPlantilla" Width="1.5" PointX="2.625" PointY="0.5" />
+        <EntityTypeShape EntityType="RecursosHumanos.BajasPers" Width="1.5" PointX="0.5" PointY="0.5" />
+        <AssociationConnector Association="RecursosHumanos.FK_BajasPers_BajaPlantilla" />
+        <AssociationConnector Association="RecursosHumanos.FKBajasOcupacion" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

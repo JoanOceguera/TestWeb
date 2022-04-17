@@ -1,31 +1,239 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using Model
+@using System.Configuration
+@{
+    ViewBag.Title = "Servired 2.0";
+}
+<br />
+@if (Request.IsAuthenticated)
+{
+    <div class="jumbotron">
+
+        <h1>Bienvenido(a) </h1>
+        <p class="lead">Gracias por visitarnos, @(CurrentUser.Get.FullName). Se encuentra logueado(a) como @CurrentUser.Get.Role </p>
+    </div>
+    <div class="row">
+        @if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")))
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Solicitudes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar las solicitudes realizadas y darle seguimiento a su estado</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Solicitudes", "Index", "Solicitud", null, new { title = "Solicitudes", @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center font-weight-bold">
+                            Usuarios
+                        </div>
+                        <div class="card-body">
+                            <p>Sección que permite administrar los usuarios registrados en el sistema</p>
+                            <div class="container">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        @Html.ActionLink("Usuarios", "Index", "User", null, new { title = "Usuarios", @class = "btn btn-primary btn-lg", @role = "button" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center font-weight-bold">
+                            Administración
+                        </div>
+                        <div class="card-body">
+                            <p>Sección que permite administrar diversas funcionalidades del sistema</p>
+                            <div class="container">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        @Html.ActionLink("Administración", "Index", "Administracion", null, new { title = "Administración", @class = "btn btn-primary btn-lg", @role = "button" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Reportes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar reportes de la información almacenada en el sistema</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Reportes", "Index", "Reportes", null, new { title = "Reportes", @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        }
+        else if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("d1bf455f-ee28-4e27-ab73-e98ba27269a2")))
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Servicios
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite solicitar los servicios de red para un trabajador </p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Servicios", "Create", "Solicitud", null, new { @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Solicitudes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar las solicitudes realizadas y darle seguimiento a su estado</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Solicitudes", "Index", "Solicitud", new { @area = CurrentUser.Get.area }, new { @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("1462d873-de2b-4a77-8c7a-c6d84e581cd8")))
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Servicios
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite solicitar los servicios de red para un trabajador </p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Servicios", "Create", "Solicitud", null, new {title = "Servicios", @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Solicitudes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar las solicitudes realizadas y darle seguimiento a su estado</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Solicitudes", "Index", "Solicitud", new {title = "Solicitudes", @area = CurrentUser.Get.area }, new { @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center font-weight-bold">
+                            Nuevo Usuario
+                        </div>
+                        <div class="card-body">
+                            <p>Sección que permite añadir un nuevo usuario a la aplicación</p>
+                            <div class="container">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        @Html.ActionLink("Nuevo Usuario", "Register", "Account", null, new { title = "Registrar Usuarios", @class = "btn btn-primary btn-lg", @role = "button" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+        else
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Solicitudes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar las solicitudes realizadas y darle seguimiento a su estado</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Solicitudes", "Index", "Solicitud", null, new { title = "Solicitudes", @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center font-weight-bold">
+                            Nuevo Usuario
+                        </div>
+                        <div class="card-body">
+                            <p>Sección que permite añadir un nuevo usuario a la aplicación</p>
+                            <div class="container">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        @Html.ActionLink("Nuevo Usuario", "Register", "Account", null, new { title = "Registrar Usuarios", @class = "btn btn-primary btn-lg", @role = "button" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header text-center font-weight-bold">
+                        Reportes
+                    </div>
+                    <div class="card-body">
+                        <p>Sección que permite visualizar reportes del sistema</p>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-auto">
+                                    @Html.ActionLink("Reportes", "Index", "Reportes", null, new { title = "Reportes", @class = "btn btn-primary btn-lg", @role = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        @Html.Partial("Login")
+    </div>
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>

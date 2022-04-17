@@ -1,0 +1,76 @@
+﻿@using TestWeb.Models
+@model EditUserViewModel
+@{
+    ViewBag.Title = "Editar Usuario";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Editar los datos de un usuario</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.HiddenFor(m => m.id, new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+            @Html.LabelFor(m => m.area, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                <select class="form-control" name="area" id="inputArea">
+                    @foreach (var r in ViewBag.areas)
+                    {
+                        if (r.id_area == (Model.area))
+                        {
+                            <option value="@r.id_area" selected>@r.descripcion</option>
+                        }
+                        else
+                        {
+                            <option value="@r.id_area">@r.descripcion</option>
+                        }
+
+                    }
+                </select>
+            </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.exp, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.exp, new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.carneId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.carneId, new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary" title="Modificar">
+                <span class="glyphicon glyphicon-send"></span>
+            </button>
+            <a href="~/User/Usuarios" title="Usuarios" class="btn btn-secondary">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </a>
+        </div>
+    </div>
+}
+

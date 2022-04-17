@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Notificar";
+}
+
+<h2>Notificar</h2>
+
+<h3 class="text-success">@ViewBag.message </h3>
+
+@using (Html.BeginForm("NotificarEspServ", "Solicitud", FormMethod.Post, new { id = "form-solicitud", novalidate = true }))
+{
+    <input type="text" value="@ViewBag.solicitud" name="idSolicitud" hidden />
+    <input type="text" value="@ViewBag.direccion" name="direccion" hidden />
+    <h4>Si desea notificar a los especialistas de servicios, por favor selecciónelos</h4>
+    <div class="card">
+        <div class="card-header">
+            Especialistas de Servicios
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                @foreach (var item in ViewBag.datos)
+                {
+                    <li class="list-group-item">
+                        <label><input type="checkbox" name="correos[]" value=@item.Email /> @item.FullName</label>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-send"></span>
+    </button>
+    <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+        <i class="glyphicon glyphicon-arrow-left"></i>
+    </a>
+}
+

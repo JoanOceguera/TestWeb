@@ -1,4 +1,8 @@
-﻿@model TestWeb.Models.RegisterViewModel
+﻿@using Model
+@using TestWeb.Models;
+@using Microsoft.AspNet.Identity
+@using System.Configuration;
+@model TestWeb.Models.RegisterViewModel
 @{
     ViewBag.Title = "Registrarse";
 }
@@ -11,6 +15,13 @@
     <h4>Cree una cuenta nueva.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -18,22 +29,113 @@
         </div>
     </div>
     <div class="form-group">
+        @if (!CurrentUser.Get.Role.Equals("Administrador"))
+        {
+            <input type="text" readonly value="@CurrentUser.Get.area" name="area" hidden id="inputArea" />
+        }
+        else
+        {
+            @Html.LabelFor(m => m.area, new { @class = "col-md-2 control-label" }) 
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => Model.area, new SelectList(ViewBag.area, "id_area", "descripcion"), htmlAttributes: new { @class = "form-control", id = "inputArea" })
+            </div>
+              
+        }
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.exp, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <select class="form-control" name="exp" id="selectExp">
+
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.rolId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+
+            @if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")))
+            {
+                @Html.DropDownListFor(x => Model.rolId, new SelectList(ViewBag.roles, "Id", "Name"), htmlAttributes: new { @class = "form-control", id = "rolId" })
+            }
+            else
+            {
+                var rol = ConfigurationManager.AppSettings.Get("d1bf455f-ee28-4e27-ab73-e98ba27269a2"); 
+                <input type="text" readonly class="form-control-plaintext" name="rolId" value="d1bf455f-ee28-4e27-ab73-e98ba27269a2" hidden>
+                <label>
+                    @rol
+                </label>
+            }
+        </div>
+    </div>
+    <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            <small class="form-text text-muted">
+                La contraseña debe tener un mínimo 6 letras que incluyan mayúsculas, minúsculas, números y al menos un caracter especial (Ej: #).
+            </small>
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            <small class="form-text text-muted">
+                La contraseña debe tener un mínimo 6 letras que incluyan mayúsculas, minúsculas, números y al menos un caracter especial (Ej: #).
+            </small>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Registrarse" />
+            <button type="submit" class="btn btn-primary" title="Registrar">
+                <span class="glyphicon glyphicon-send"></span>
+            </button>
+            @if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")))
+            {
+                <a href="~/User/Usuarios" title="Usuarios" class="btn btn-secondary">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </a>
+            }
+            else
+            {
+                <a href="~/Home/" title="Inicio" class="btn btn-secondary">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </a>
+            }
         </div>
     </div>
+
+    <script type="text/javascript">
+
+        llenarComboExp()
+        $("#inputArea").change(function () {
+
+            llenarComboExp();
+        });
+
+
+        function llenarComboExp()
+        {
+            $.ajax({
+                type: 'GET',
+                data: { area: $("#inputArea").val() },
+                url: '@Url.Action("ExpArea", "Solicitud")',
+                dataType: "json",
+                success: function (resultado)
+                {
+                    $("#selectExp").empty();
+                    $.each(resultado, function (i, item)
+                    {
+
+                        $("#selectExp").append("<option value='"
+                            + item.exp + "'>" + item.exp
+                            + "</option>");
+                    });
+                }
+            });
+        }
+    </script>
 }
 
 @section Scripts {

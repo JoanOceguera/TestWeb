@@ -1,0 +1,761 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ServiciosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asignaciones">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+            <PropertyRef Name="idServicio" />
+          </Key>
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="idServicio" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="exp" Type="int" Nullable="false" />
+          <Property Name="area" Type="int" Nullable="false" />
+          <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="carneId" Type="nchar" MaxLength="11" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="exp" Type="int" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="validez" Type="datetime" />
+          <Property Name="rolpc" Type="nvarchar(max)" />
+          <Property Name="tpers" Type="nvarchar" MaxLength="1" />
+          <Property Name="nombre_usuario" Type="nvarchar(max)" />
+          <Property Name="carneId" Type="char" MaxLength="11" />
+          <Property Name="marca" Type="bit" />
+        </EntityType>
+        <EntityType Name="Cuentas_Ausentes">
+          <Key>
+            <PropertyRef Name="idCuentaA" />
+          </Key>
+          <Property Name="idCuentaA" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_cuenta" Type="int" Nullable="false" />
+          <Property Name="exp" Type="int" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Deshabilitar">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCuenta" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio" Type="datetime" Nullable="false" />
+          <Property Name="fecha_fin" Type="datetime" />
+          <Property Name="observacion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="activa" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Razones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Solicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="exp_benef" Type="int" />
+          <Property Name="validez" Type="datetime" />
+          <Property Name="suspencion_inicio" Type="datetime" />
+          <Property Name="suspencion_fin" Type="datetime" />
+          <Property Name="area" Type="int" />
+          <Property Name="rolpc" Type="nvarchar(max)" />
+          <Property Name="tpers" Type="nvarchar" MaxLength="1" />
+          <Property Name="estado" Type="nvarchar(max)" />
+          <Property Name="tsolic" Type="nvarchar" MaxLength="1" />
+          <Property Name="razon_suspencion" Type="nvarchar" MaxLength="10" />
+          <Property Name="fecha_solicitud" Type="datetime" />
+          <Property Name="fecha_aprobacion" Type="datetime" />
+          <Property Name="fecha_ejecucion" Type="datetime" />
+          <Property Name="usuario" Type="nvarchar" MaxLength="128" />
+          <Property Name="nombre_usuario" Type="nvarchar(max)" />
+          <Property Name="carneId" Type="char" MaxLength="11" />
+        </EntityType>
+        <EntityType Name="Solicitud_Razon">
+          <Key>
+            <PropertyRef Name="idSolicitud" />
+            <PropertyRef Name="idRazon" />
+          </Key>
+          <Property Name="idSolicitud" Type="int" Nullable="false" />
+          <Property Name="idRazon" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Solicitud_Servicio">
+          <Key>
+            <PropertyRef Name="idServicio" />
+            <PropertyRef Name="idSolicitud" />
+          </Key>
+          <Property Name="idServicio" Type="int" Nullable="false" />
+          <Property Name="idSolicitud" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Asignaciones_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+          <End Role="Asignaciones" Type="Self.Asignaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asignaciones">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Asignaciones_Servicios">
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="1" />
+          <End Role="Asignaciones" Type="Self.Asignaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asignaciones">
+              <PropertyRef Name="idServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuentas_Ausentes_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cuentas_Ausentes" Type="Self.Cuentas_Ausentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Cuentas_Ausentes">
+              <PropertyRef Name="id_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deshabilitar_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+          <End Role="Deshabilitar" Type="Self.Deshabilitar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Deshabilitar">
+              <PropertyRef Name="idCuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Solicitud_Razon_Razon">
+          <End Role="Razones" Type="Self.Razones" Multiplicity="1" />
+          <End Role="Solicitud_Razon" Type="Self.Solicitud_Razon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Razones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Solicitud_Razon">
+              <PropertyRef Name="idRazon" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Solicitud_Razon_Solicitud">
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="1" />
+          <End Role="Solicitud_Razon" Type="Self.Solicitud_Razon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Solicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Solicitud_Razon">
+              <PropertyRef Name="idSolicitud" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Solicitud_Servicio_Servicio">
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="1" />
+          <End Role="Solicitud_Servicio" Type="Self.Solicitud_Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Solicitud_Servicio">
+              <PropertyRef Name="idServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Solicitud_Servicio_Solicitud">
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="1" />
+          <End Role="Solicitud_Servicio" Type="Self.Solicitud_Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Solicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Solicitud_Servicio">
+              <PropertyRef Name="idSolicitud" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Solicitud_User">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ServiciosModelStoreContainer">
+          <EntitySet Name="Asignaciones" EntityType="Self.Asignaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cuentas_Ausentes" EntityType="Self.Cuentas_Ausentes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Deshabilitar" EntityType="Self.Deshabilitar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Razones" EntityType="Self.Razones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Solicitud" EntityType="Self.Solicitud" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Solicitud_Razon" EntityType="Self.Solicitud_Razon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Solicitud_Servicio" EntityType="Self.Solicitud_Servicio" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Asignaciones_Cuentas" Association="Self.FK_Asignaciones_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Asignaciones" EntitySet="Asignaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Asignaciones_Servicios" Association="Self.FK_Asignaciones_Servicios">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="Asignaciones" EntitySet="Asignaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuentas_Ausentes_Cuentas" Association="Self.FK_Cuentas_Ausentes_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Cuentas_Ausentes" EntitySet="Cuentas_Ausentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deshabilitar_Cuentas" Association="Self.FK_Deshabilitar_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Deshabilitar" EntitySet="Deshabilitar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Solicitud_Razon_Razon" Association="Self.FK_Solicitud_Razon_Razon">
+            <End Role="Razones" EntitySet="Razones" />
+            <End Role="Solicitud_Razon" EntitySet="Solicitud_Razon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Solicitud_Razon_Solicitud" Association="Self.FK_Solicitud_Razon_Solicitud">
+            <End Role="Solicitud" EntitySet="Solicitud" />
+            <End Role="Solicitud_Razon" EntitySet="Solicitud_Razon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Solicitud_Servicio_Servicio" Association="Self.FK_Solicitud_Servicio_Servicio">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="Solicitud_Servicio" EntitySet="Solicitud_Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Solicitud_Servicio_Solicitud" Association="Self.FK_Solicitud_Servicio_Solicitud">
+            <End Role="Solicitud" EntitySet="Solicitud" />
+            <End Role="Solicitud_Servicio" EntitySet="Solicitud_Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Solicitud_User" Association="Self.FK_Solicitud_User">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ServiciosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRoles" ToRole="AspNetUserRoles" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRoles" ToRole="AspNetRoles" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUserRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="exp" Type="Int32" Nullable="false" />
+          <Property Name="area" Type="Int32" Nullable="false" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="carneId" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
+          <NavigationProperty Name="Solicitud" Relationship="ServiciosModel.FK_Solicitud_User" FromRole="AspNetUsers" ToRole="Solicitud" />
+        </EntityType>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="exp" Type="Int32" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="validez" Type="DateTime" Precision="3" />
+          <Property Name="rolpc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tpers" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="nombre_usuario" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="carneId" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
+          <Property Name="marca" Type="Boolean" />
+          <NavigationProperty Name="Deshabilitar" Relationship="Self.FK_Deshabilitar_Cuentas" FromRole="Cuentas" ToRole="Deshabilitar" />
+          <NavigationProperty Name="Servicios" Relationship="Self.Asignaciones" FromRole="Cuentas" ToRole="Servicios" />
+          <NavigationProperty Name="Cuentas_Ausentes" Relationship="ServiciosModel.FK_Cuentas_Ausentes_Cuentas" FromRole="Cuentas" ToRole="Cuentas_Ausentes" />
+        </EntityType>
+        <EntityType Name="Deshabilitar">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCuenta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_fin" Type="DateTime" Precision="3" />
+          <Property Name="observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cuentas" Relationship="Self.FK_Deshabilitar_Cuentas" FromRole="Deshabilitar" ToRole="Cuentas" />
+        </EntityType>
+        <EntityType Name="Razones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Solicitud" Relationship="ServiciosModel.Solicitud_Razon" FromRole="Razones" ToRole="Solicitud" />
+        </EntityType>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cuentas" Relationship="Self.Asignaciones" FromRole="Servicios" ToRole="Cuentas" />
+          <NavigationProperty Name="Solicitud" Relationship="ServiciosModel.Solicitud_Servicio" FromRole="Servicios" ToRole="Solicitud" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deshabilitar_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+          <End Role="Deshabilitar" Type="Self.Deshabilitar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Deshabilitar">
+              <PropertyRef Name="idCuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Asignaciones">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="*" />
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ServiciosEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
+          <EntitySet Name="Cuentas" EntityType="Self.Cuentas" />
+          <EntitySet Name="Deshabilitar" EntityType="Self.Deshabilitar" />
+          <EntitySet Name="Razones" EntityType="Self.Razones" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicios" />
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deshabilitar_Cuentas" Association="Self.FK_Deshabilitar_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Deshabilitar" EntitySet="Deshabilitar" />
+          </AssociationSet>
+          <AssociationSet Name="Asignaciones" Association="Self.Asignaciones">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Servicios" EntitySet="Servicios" />
+          </AssociationSet>
+          <EntitySet Name="Cuentas_Ausentes" EntityType="ServiciosModel.Cuentas_Ausentes" />
+          <AssociationSet Name="FK_Cuentas_Ausentes_Cuentas" Association="ServiciosModel.FK_Cuentas_Ausentes_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Cuentas_Ausentes" EntitySet="Cuentas_Ausentes" />
+          </AssociationSet>
+          <EntitySet Name="Solicitud" EntityType="ServiciosModel.Solicitud" />
+          <AssociationSet Name="FK_Solicitud_User" Association="ServiciosModel.FK_Solicitud_User">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+          <AssociationSet Name="Solicitud_Razon" Association="ServiciosModel.Solicitud_Razon">
+            <End Role="Razones" EntitySet="Razones" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+          <AssociationSet Name="Solicitud_Servicio" Association="ServiciosModel.Solicitud_Servicio">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Cuentas_Ausentes">
+          <Key>
+            <PropertyRef Name="idCuentaA" />
+          </Key>
+          <Property Name="idCuentaA" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_cuenta" Type="Int32" Nullable="false" />
+          <Property Name="exp" Type="Int32" Nullable="false" />
+          <Property Name="estado" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cuentas" Relationship="ServiciosModel.FK_Cuentas_Ausentes_Cuentas" FromRole="Cuentas_Ausentes" ToRole="Cuentas" />
+        </EntityType>
+        <Association Name="FK_Cuentas_Ausentes_Cuentas">
+          <End Type="ServiciosModel.Cuentas" Role="Cuentas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ServiciosModel.Cuentas_Ausentes" Role="Cuentas_Ausentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Cuentas_Ausentes">
+              <PropertyRef Name="id_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Solicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="exp_benef" Type="Int32" />
+          <Property Name="validez" Type="DateTime" Precision="3" />
+          <Property Name="suspencion_inicio" Type="DateTime" Precision="3" />
+          <Property Name="suspencion_fin" Type="DateTime" Precision="3" />
+          <Property Name="rolpc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tpers" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tsolic" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="razon_suspencion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_solicitud" Type="DateTime" Precision="3" />
+          <Property Name="fecha_aprobacion" Type="DateTime" Precision="3" />
+          <Property Name="fecha_ejecucion" Type="DateTime" Precision="3" />
+          <Property Name="usuario" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="nombre_usuario" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="carneId" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="ServiciosModel.FK_Solicitud_User" FromRole="Solicitud" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Razones" Relationship="ServiciosModel.Solicitud_Razon" FromRole="Solicitud" ToRole="Razones" />
+          <NavigationProperty Name="Servicios" Relationship="ServiciosModel.Solicitud_Servicio" FromRole="Solicitud" ToRole="Servicios" />
+        </EntityType>
+        <Association Name="FK_Solicitud_User">
+          <End Type="ServiciosModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="ServiciosModel.Solicitud" Role="Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Solicitud_Razon">
+          <End Type="ServiciosModel.Razones" Role="Razones" Multiplicity="*" />
+          <End Type="ServiciosModel.Solicitud" Role="Solicitud" Multiplicity="*" />
+        </Association>
+        <Association Name="Solicitud_Servicio">
+          <End Type="ServiciosModel.Servicios" Role="Servicios" Multiplicity="*" />
+          <End Type="ServiciosModel.Solicitud" Role="Solicitud" Multiplicity="*" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ServiciosModelStoreContainer" CdmEntityContainer="ServiciosEntities">
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="ServiciosModel.AspNetRoles">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserRoles">
+            <EntityTypeMapping TypeName="ServiciosModel.AspNetUserRoles">
+              <MappingFragment StoreEntitySet="AspNetUserRoles">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="ServiciosModel.AspNetUsers">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="exp" ColumnName="exp" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="carneId" ColumnName="carneId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cuentas">
+            <EntityTypeMapping TypeName="ServiciosModel.Cuentas">
+              <MappingFragment StoreEntitySet="Cuentas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="exp" ColumnName="exp" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="validez" ColumnName="validez" />
+                <ScalarProperty Name="rolpc" ColumnName="rolpc" />
+                <ScalarProperty Name="tpers" ColumnName="tpers" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="carneId" ColumnName="carneId" />
+                <ScalarProperty Name="marca" ColumnName="marca" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deshabilitar">
+            <EntityTypeMapping TypeName="ServiciosModel.Deshabilitar">
+              <MappingFragment StoreEntitySet="Deshabilitar">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idCuenta" ColumnName="idCuenta" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+                <ScalarProperty Name="activa" ColumnName="activa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Razones">
+            <EntityTypeMapping TypeName="ServiciosModel.Razones">
+              <MappingFragment StoreEntitySet="Razones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicios">
+            <EntityTypeMapping TypeName="ServiciosModel.Servicios">
+              <MappingFragment StoreEntitySet="Servicios">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Asignaciones" TypeName="ServiciosModel.Asignaciones" StoreEntitySet="Asignaciones">
+            <EndProperty Name="Cuentas">
+              <ScalarProperty Name="id" ColumnName="idUsuario" />
+            </EndProperty>
+            <EndProperty Name="Servicios">
+              <ScalarProperty Name="id" ColumnName="idServicio" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Cuentas_Ausentes">
+            <EntityTypeMapping TypeName="ServiciosModel.Cuentas_Ausentes">
+              <MappingFragment StoreEntitySet="Cuentas_Ausentes">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="exp" ColumnName="exp" />
+                <ScalarProperty Name="id_cuenta" ColumnName="id_cuenta" />
+                <ScalarProperty Name="idCuentaA" ColumnName="idCuentaA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Solicitud">
+            <EntityTypeMapping TypeName="ServiciosModel.Solicitud">
+              <MappingFragment StoreEntitySet="Solicitud">
+                <ScalarProperty Name="carneId" ColumnName="carneId" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="fecha_ejecucion" ColumnName="fecha_ejecucion" />
+                <ScalarProperty Name="fecha_aprobacion" ColumnName="fecha_aprobacion" />
+                <ScalarProperty Name="fecha_solicitud" ColumnName="fecha_solicitud" />
+                <ScalarProperty Name="razon_suspencion" ColumnName="razon_suspencion" />
+                <ScalarProperty Name="tsolic" ColumnName="tsolic" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="tpers" ColumnName="tpers" />
+                <ScalarProperty Name="rolpc" ColumnName="rolpc" />
+                <ScalarProperty Name="suspencion_fin" ColumnName="suspencion_fin" />
+                <ScalarProperty Name="suspencion_inicio" ColumnName="suspencion_inicio" />
+                <ScalarProperty Name="validez" ColumnName="validez" />
+                <ScalarProperty Name="exp_benef" ColumnName="exp_benef" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Solicitud_Razon" TypeName="ServiciosModel.Solicitud_Razon" StoreEntitySet="Solicitud_Razon">
+            <EndProperty Name="Solicitud">
+              <ScalarProperty Name="id" ColumnName="idSolicitud" />
+            </EndProperty>
+            <EndProperty Name="Razones">
+              <ScalarProperty Name="id" ColumnName="idRazon" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Solicitud_Servicio" TypeName="ServiciosModel.Solicitud_Servicio" StoreEntitySet="Solicitud_Servicio">
+            <EndProperty Name="Solicitud">
+              <ScalarProperty Name="id" ColumnName="idSolicitud" />
+            </EndProperty>
+            <EndProperty Name="Servicios">
+              <ScalarProperty Name="id" ColumnName="idServicio" />
+            </EndProperty>
+          </AssociationSetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

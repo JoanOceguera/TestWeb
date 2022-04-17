@@ -1,0 +1,42 @@
+﻿@model Model.Entities.Servicios
+
+@{
+    ViewBag.Title = "Añadir";
+}
+
+<h2>Añadir Servicio</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary" title="Añadir">
+                        <span class="glyphicon glyphicon-send"></span>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <a href="~/Servicios" title="Regresar a Servicios" class="btn btn-secondary">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,609 @@
+﻿@using Model
+@using System.Configuration
+@model Model.Entities.Solicitud
+@{
+    ViewBag.Title = "Solicitar Servicios";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            @using (Html.BeginForm("Create", "Solicitud", FormMethod.Post, new { id = "form-solicitud", novalidate = true }))
+            {
+                <fieldset class="border p-3">
+                    <legend class="w-auto">
+                        Tipo de Solicitud
+                    </legend>
+                    <div class="col" id="tipoSolicitud">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="c" name="tsolic" checked>
+                            <label class="form-check-label">
+                                Creación de un usuario NO existente
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            @if (ViewBag.cuentasActivas)
+                            {
+                                <input class="form-check-input" type="radio" value="m" name="tsolic">
+                                <label class="form-check-label">
+                                    Modificación de Privilegios de un usuario existente
+                                </label>
+                            }
+
+                        </div>
+                        <div class="form-check">
+                            @if (ViewBag.cuentasInactivas)
+                            {
+                                <input class="form-check-input" type="radio" value="r" name="tsolic" required>
+                                <label class="form-check-label">
+                                    Renovación del Servicio a un usuario existente
+                                </label>
+                            }
+                            else
+                            {
+                                <input class="form-check-input" type="radio" value="r" name="tsolic" required hidden>
+                                <label class="form-check-label" hidden>
+                                    Renovacion del Servicio a un usuario existente
+                                </label>
+                            }
+                            <div class="invalid-feedback">
+                                Por favor seleccione un tipo de solicitud
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <fieldset class="border p-3">
+                    <legend class="w-auto">Datos Personales</legend>
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <div class="form-row">
+                                @if (CurrentUser.Get.Role.Equals("Administrador"))
+                                {
+                                    <div class="col">
+                                        <label id="labeldivArea">Seleccione un Área</label>
+                                        @Html.DropDownList("area", null, htmlAttributes: new { @class = "form-control", @id = "divArea" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col">
+                                        <label id="labeldivArea">
+                                            Área: @(((List<Model.Entities.Area>)ViewBag.areas).Where(x => x.id_area == CurrentUser.Get.area).Single().descripcion)
+                                            <input type="text" readonly class="form-control-plaintext" id="divArea" name="area" value="@CurrentUser.Get.area" hidden>
+                                        </label>     
+                                    </div>
+                                }
+                                <div class="col">
+                                    <label>Seleccione una persona</label>
+                                    <select class="form-control" id="comboPersonal"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid h-100">
+                        <div class="row h-100">
+                            <div class="col-3 h-100 flex-column">
+                                <div>
+                                    <img id="divIma" class="img-thumbnail" style="height:100px; width:100px" src="~/Fotos/H.jpg" />
+                                </div>
+                                <div>
+                                    <div class="form-group row">
+                                        <label for="divExp" class="col-sm-2 col-form-label">
+                                            Exp:
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" readonly class="form-control-plaintext" id="divExp" name="exp_benef">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-9 align-content-start">
+                                <div>
+                                    <label>
+                                        Cargo:
+                                    </label>
+                                    <label id="divCargo">
+
+                                    </label>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <fieldset class="border p-3">
+                    <legend class="w-auto">Datos de Servicios</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-auto">
+                                @Html.LabelFor(m => m.tpers, new { @class = "col-auto control-label" })
+                                @Html.DropDownListFor(m => m.tpers, (SelectList)ViewBag.Personal, new { @class = "form-control", required = "required" })
+                                <div class="invalid-feedback">
+                                    Por favor seleccione el tipo de personal
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                @Html.LabelFor(m => m.rolpc, new { @class = "col-auto control-label" })
+                                @Html.DropDownListFor(m => m.rolpc, (SelectList)ViewBag.Rol, new { @class = "form-control", required = "required" })
+                                <div class="invalid-feedback">
+                                    Por favor seleccione el tipo de usuario en la PC
+                                </div>
+
+                            </div>
+                            <div class="col-auto" id="divServ">
+                                @Html.LabelFor(m => m.Servicios, new { @class = "col-auto control-label" })
+                                <br />
+                                @Html.DropDownList("servicios", null, htmlAttributes: new { @class = "form-control Select2", id = "selectServicios", name = "servicios", style = "width:250px;", @multiple = true, required = "required" })
+                                <div class="invalid-feedback">
+                                    Debe seleccionar al menos un servicio
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <fieldset class="border p-3" id="validezSet">
+                    <legend class="w-auto">Validez de la Solicitud</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="checkbox" value="0" id="checkValidez" />
+                                Mientras mantenga vinculo laboral
+                            </div>
+                            <div class="col-8">
+                                <label for="validez">Hasta la fecha seleccionada:</label>
+                                <input class="datepicker form-control" name="validez" type="text" id="dateValidez" required />
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una fecha
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <fieldset class="border p-3" id="deshabilitarSet">
+                    <legend class="w-auto">Deshabilitación</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="checkbox" id="checkDeshabilitar" />
+                                Desea deshabilitar la cuenta
+                            </div>
+                            <br />
+                            <div class="container-fluid h-100" id="divRazon">
+                                <div>
+                                    <label>
+                                        Razón de la Deshabilitación
+                                    </label>
+                                </div>
+                                <div class="row h-100">
+                                    <div class="col-6 h-100 flex-column" id="left">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="cm">
+                                                Certificado Medico
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="se">
+                                                Salida al Exterior
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="lm">
+                                                Licencia de Maternidad
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="o" id="checkRazonO">
+                                                Otros
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="m">
+                                                Movilización
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="lss">
+                                                Licencia sin Sueldo
+                                            </label>
+                                        </div>                                
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="razon_suspencion" value="md">
+                                                Medida Disciplinaria
+                                            </label>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Por favor seleccione una razón para deshabilitar la cuenta
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        <br />
+                        <div class="row" id="divDates">
+                            <div class="col-auto">
+                               Desde
+                            </div>
+                            <div class="col-auto">
+                                <input class="datepicker form-control" name="suspencion_inicio" type="text" id="dateSuspencionInicio"/>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una fecha
+                                </div>
+                        </div>
+                            <div class="col-auto">
+                                hasta
+                            </div>
+                            <div class="col-auto">
+                                <input class="datepicker form-control" name="suspencion_fin" type="text" id="dateSuspencionFin"/>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una fecha
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                </fieldset>
+                <fieldset class="border p-3" id="renovacionSet">
+                    <legend class="w-auto">Renovación de Servicios</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <select class="form-control col-4" name="nombre_usuario" id="selectNombreUsuario">
+                                
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="form-row">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary" title="Solicitar Servicios">
+                                    <span class="glyphicon glyphicon-send"></span>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                @if (CurrentUser.Get.Role.Equals("Administrador") || CurrentUser.Get.Role.Equals("EspecialistaInf"))
+                                {
+                                    <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+                                        <i class="glyphicon glyphicon-arrow-left"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="~/Solicitud/@("?area=" + CurrentUser.Get.area)" title="Solicitudes" class="btn btn-secondary">
+                                        <i class="glyphicon glyphicon-arrow-left"></i>
+                                    </a>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <link type="text/css" href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js">
+
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function ()
+    {
+        $('.Select2').select2({
+            placeholder: "Seleccione los servicios"
+        });
+        var requiredCheckboxes = $('#divServ :checkbox[required]');
+        if (requiredCheckboxes.is(':checked')) {
+            requiredCheckboxes.removeAttr('required');
+        }
+        else {
+            requiredCheckboxes.attr('required', 'required');
+        }
+
+        var checkValidez = document.querySelector('#checkValidez');
+        var dateValidez = document.querySelector('#dateValidez');
+        if (checkValidez.checked == true) {
+            dateValidez.value = null;
+            dateValidez.disabled = true;
+            dateValidez.required = false;
+        }
+        else {
+            dateValidez.disabled = false;
+            dateValidez.required = true;
+        }
+
+        var checkDeshabilitar = $('#checkDeshabilitar');
+        var divRazon = document.querySelector('#divRazon');
+        var divDates = document.querySelector('#divDates');
+        var dateSuspencionInicio = document.querySelector('#dateSuspencionInicio');
+        var dateSuspencionFin = document.querySelector('#dateSuspencionFin');
+        var checkRazonO = document.querySelector('#checkRazonO');
+        if (checkDeshabilitar.is(':checked'))
+        {
+            divRazon.hidden = false;
+            divDates.hidden = false;
+            checkRazonO.required = true;
+            dateSuspencionInicio = true;
+            dateSuspencionFin = true;
+        }
+        else
+        {
+            divRazon.hidden = true;
+            divDates.hidden = true;
+            checkRazonO.required = false;
+            dateSuspencionInicio = false;
+            dateSuspencionFin = false;
+        }
+
+        var inputTsolic = $("input[name='tsolic']:checked").val();
+        var fieldDesh = document.querySelector('#deshabilitarSet');
+        var fieldRenov = document.querySelector('#renovacionSet');
+        var selectNombreUsuario = document.querySelector('#selectNombreUsuario');
+        var dateValidez = document.querySelector('#dateValidez');
+        if (inputTsolic != null)
+        {
+            llenarCombo()
+        }
+        if (inputTsolic === "r")
+        {
+            fieldDesh.hidden = true;
+            fieldRenov.hidden = false;
+            selectNombreUsuario.required = true;
+        }
+        else
+            if (inputTsolic === "m")
+        {
+            fieldDesh.hidden = false;
+            fieldRenov.hidden = true;
+            selectNombreUsuario.required = false;
+            dateValidez.required = false;
+            $("#selectNombreUsuario").empty();
+        }
+        else
+            {
+                fieldDesh.hidden = true;
+                fieldRenov.hidden = true;
+                selectNombreUsuario.required = false;
+        }
+
+        });
+
+        $("#comboPersonal").change(function ()
+        {
+            var divExp = document.querySelector('#divExp');
+            var divCargo = document.querySelector('#divCargo');
+            var divArea = document.querySelector('#divArea');
+            var divIma = document.querySelector('#divIma');
+            var labeldivArea = document.querySelector('#labeldivArea');
+            llenarDatos(divExp, divCargo, divArea, divIma, labeldivArea);
+        });
+
+        $("#divArea").change(function () {
+            if ($("input[name='tsolic']:checked").val() != null)
+            {
+                llenarCombo()
+            }
+
+        });
+
+        $("#checkValidez").click(function ()
+        {
+            var checkValidez = document.querySelector('#checkValidez');
+            var dateValidez = document.querySelector('#dateValidez');
+            if (checkValidez.checked == true)
+            {
+                dateValidez.value = null;
+                dateValidez.disabled = true;
+                dateValidez.required = false;
+            }
+            else
+            {
+                dateValidez.disabled = false;
+                dateValidez.required = true;
+            }
+        });
+
+        $(function ()
+        {
+            var requiredCheckboxes = $('#divServ :checkbox[required]');
+            requiredCheckboxes.change(function () {
+                if (requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
+
+        $(function ()
+        {
+            $('#checkDeshabilitar').click(function ()
+            {
+                var checkDeshabilitar = $('#checkDeshabilitar');
+                var divRazon = document.querySelector('#divRazon');
+                var divDates = document.querySelector('#divDates');
+                var checkRazonO = document.querySelector('#checkRazonO');
+                var dateSuspencionInicio = document.querySelector('#dateSuspencionInicio');
+                var dateSuspencionFin = document.querySelector('#dateSuspencionFin');
+                var checkValidez = document.querySelector('#checkValidez');
+                var dateValidez = document.querySelector('#dateValidez');
+                var validezSet = document.querySelector('#validezSet');
+                if (checkDeshabilitar.is(':checked'))
+                {
+                    validezSet.hidden = true
+                    dateValidez.value = null;
+                    dateValidez.required = false;
+                    checkValidez.checked = false;
+                    divRazon.hidden = false;
+                    divDates.hidden = false;
+                    checkRazonO.required = true;
+                    dateSuspencionInicio = true;
+                    dateSuspencionFin = true;
+                }
+                else
+                {
+                    validezSet.hidden = false;
+                    dateValidez.disabled = false;
+                    dateValidez.required = true;
+                    divRazon.hidden = true;
+                    divDates.hidden = true;
+                    checkRazonO.required = false;
+                    dateSuspencionInicio = false;
+                    dateSuspencionFin = false;
+                }
+            });
+        });
+
+        $("input[name=tsolic]").click(function () {
+            var fieldDesh = document.querySelector('#deshabilitarSet');
+            var fieldRenov = document.querySelector('#renovacionSet');
+            var selectNombreUsuario = document.querySelector('#selectNombreUsuario');
+            var dateValidez = document.querySelector('#dateValidez');
+            llenarCombo();
+            if ($(this).val() === "c") {
+                fieldRenov.hidden = true;
+                fieldDesh.hidden = true;
+                selectNombreUsuario.required = false;
+                $("#selectNombreUsuario").empty();
+                llenarComboNombre();
+            }
+            else if ($(this).val() === "m") {
+                fieldRenov.hidden = true;
+                fieldDesh.hidden = false;
+                selectNombreUsuario.required = false;
+                $("#selectNombreUsuario").empty();
+                dateValidez.required = false;
+            }
+            else {
+                fieldRenov.hidden = false;
+                fieldDesh.hidden = true;
+                selectNombreUsuario.required = true;
+                llenarComboNombre();
+            }
+        });
+
+        $(function () {
+            $('.datepicker').datepicker({
+                dateFormat: 'dd/mm/yy',
+                minDate: "0D"
+            });
+        });
+
+        $("#dateSuspencionInicio").change(function () {
+            var date = $(this).datepicker('getDate');
+            date.setDate(date.getDate() + 1)
+            $('#dateSuspencionFin').datepicker('option', 'minDate', date || 1);
+
+        });
+
+        $.datepicker.setDefaults($.datepicker.regional["es"]);
+
+        function llenarDatos(divExp, divCargo, divArea, divIma, labeldivArea)
+        {
+            divExp.value = $("#comboPersonal").val();
+            divCargo.value = null;
+            divIma.setAttribute("src", "/Fotos/H.jpg");
+            $.ajax
+                ({
+
+                    type: 'GET',
+                    url: '@Url.Action("Datos", "Solicitud")',
+                    data: { exp: $("#comboPersonal").val() },
+                    dataType: "json",
+                    success: function (resultado)
+                    {
+                        divCargo.innerHTML = resultado[0];
+                        if (resultado[3] === 1) {
+                            var url = "@Url.Action("GetImage", "Solicitud", new { Exp="exp"})";
+                            url = url.replace("exp", $("#comboPersonal").val());
+                            divIma.setAttribute("src", url);
+                        }
+                        else {
+                            divIma.setAttribute("src", "/Fotos/H.jpg");
+                        }
+                        if (@(CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02"))))
+                        {
+                            divArea.value = resultado[1];
+                            labeldivArea.textContent = null;
+                            var text = document.createTextNode("Área: " + resultado[2]);
+                            labeldivArea.appendChild(text);
+                            labeldivArea.appendChild(divArea);
+                        }
+                    }
+                });
+        }
+
+        function llenarCombo()
+        {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Personas", "Solicitud")',
+                data: { area:$("#divArea").val(), tsolic: $("input[name='tsolic']:checked").val() },
+                dataType: "json",
+                success: function (resultado)
+                {
+                    $("#comboPersonal").empty();
+                    $.each(resultado, function (i, item) {
+                        $("#comboPersonal").append("<option value='"
+                            + item.exp + "'>" + item.nombre + " " + item.apellido1 + " " + item.apellido2
+                            + "</option>");
+                    });
+                    var divExp = document.querySelector('#divExp');
+                    var divCargo = document.querySelector('#divCargo');
+                    var divArea = document.querySelector('#divArea');
+                    var divIma = document.querySelector('#divIma');
+                    var labeldivArea = document.querySelector('#labeldivArea');
+                    llenarDatos(divExp, divCargo, divArea, divIma, labeldivArea);
+                }
+            });
+        }
+
+        function llenarComboNombre()
+        {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("CuentasInactivas", "Solicitud")',
+                dataType: "json",
+                success: function (resultado)
+                {
+                    $("#selectNombreUsuario").empty();
+                    $.each(resultado, function (i, item)
+                    {
+
+                        $("#selectNombreUsuario").append("<option value='"
+                            + item.nombre_usuario + "'>" + item.nombre_usuario
+                            + "</option>");
+                    });
+                }
+            });
+        }
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var form = document.getElementById('form-solicitud');
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            }, false);
+        })();
+    </script>
+</div>

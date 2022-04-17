@@ -1,0 +1,32 @@
+﻿@using TestWeb.Models
+@model AddRolViewModel
+@{
+    ViewBag.Title = "Añadir Rol";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("AddRole", "User", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Cree un nuevo rol </h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary" title="Añadir">
+                <span class="glyphicon glyphicon-send"></span>
+            </button>
+            <a href="~/User/Roles" title="Regresar a roles" class="btn btn-secondary">
+                <i class="glyphicon glyphicon-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="99c517c9e30c4bac904ae02712f19392" Name="Diagram1">
+        <EntityTypeShape EntityType="ServiciosModel.AspNetRoles" Width="1.5" PointX="9.375" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.AspNetUserRoles" Width="1.5" PointX="9.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.AspNetUsers" Width="1.5" PointX="7.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.Cuentas" Width="1.5" PointX="0.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.Deshabilitar" Width="1.5" PointX="3" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.Razones" Width="1.5" PointX="5.5" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiciosModel.Servicios" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="ServiciosModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" ManuallyRouted="false" />
+        <AssociationConnector Association="ServiciosModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="ServiciosModel.FK_Deshabilitar_Cuentas" ManuallyRouted="false" />
+        <AssociationConnector Association="ServiciosModel.Asignaciones" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ServiciosModel.Cuentas_Ausentes" Width="1.5" PointX="0.5" PointY="5.5" />
+        <AssociationConnector Association="ServiciosModel.FK_Cuentas_Ausentes_Cuentas" />
+        <EntityTypeShape EntityType="ServiciosModel.Solicitud" Width="1.5" PointX="5.25" PointY="0.5" />
+        <AssociationConnector Association="ServiciosModel.FK_Solicitud_User" />
+        <AssociationConnector Association="ServiciosModel.Solicitud_Razon" />
+        <AssociationConnector Association="ServiciosModel.Solicitud_Servicio" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

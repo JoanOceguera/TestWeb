@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Rechazar";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Rechazar", "Solicitud", FormMethod.Post, new { id = "form-solicitud", novalidate = true }))
+{
+    <div class="card">
+        <div class="card-header">
+            Razones para rechazar solicitud
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                @foreach (var item in ViewBag.razones)
+                {
+                    <li class="list-group-item">
+                        <label><input type="checkbox" name="razones[]" value=@item.id /> @item.descripcion</label>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <input type="text" hidden name="id" value="@ViewBag.id" />
+    <br />
+    <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-send">
+        </span>
+    </button>
+        <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+        </a>
+}
+
+
+
+

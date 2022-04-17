@@ -1,0 +1,29 @@
+﻿@model Model.Entities.Cuentas
+
+@{
+    ViewBag.Title = "Desactivar";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Está seguro que desea desactivar esta cuenta?</h3>
+<div>
+    <hr />
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary" title="Desactivar">
+                        <span class="glyphicon glyphicon-send"></span>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <a href="~/Cuentas" title="Regresar a Cuentas" class="btn btn-secondary">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

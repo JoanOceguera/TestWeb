@@ -1,45 +1,154 @@
-﻿<!DOCTYPE html>
+﻿@using Model
+@using System.Configuration
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/jquery/js")
+    @Scripts.Render("~/bundles/jqueryval/js")
+    @Styles.Render("~/Content/css/css")
+    @Scripts.Render("~/bundles/modernizr/js")
+    <script src="~/Scripts/all.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Nombre de aplicación", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+            @Html.ActionLink("Servired 2.0", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a href="~/Home" title="Inicio" class="btn btn-dark">
+                            <i class="glyphicon glyphicon-home"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="~/Home/About" title="Acerca de" class="btn btn-dark">
+                            <i class="glyphicon glyphicon-info-sign"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="~/Home/Contact" title="Contacto" class="btn btn-dark">
+                            <i class="glyphicon glyphicon-earphone"></i>
+                        </a>
+                    </li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")) || CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("8834006e-f16c-4f30-a924-ee00c2992b71")))
+                        {
+                            <li class="nav-item active">
+                                <a href="~/Solicitud/" title="Solicitudes" class="btn btn-dark">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item active">
+                                <a href="~/Solicitud/@("?area=" + CurrentUser.Get.area)" title="Solicitudes" class="btn btn-dark">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                </a>
+                            </li>
+                        }
+
+                    }
                 </ul>
-                @Html.Partial("_LoginPartial")
+				@Html.Partial("_LoginPartial")
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+            <p>&copy; @(DateTime.Now.Year) - Centro de InmunoEnsayo (CIE)</p>
         </footer>
     </div>
+    @Scripts.Render("~/bundles/popper/js")
+    @Scripts.Render("~/bundles/bootstrap/js")
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
+    <script src=@Url.Content("~/Scripts/jquery.ui.datepicker-es.js")></script>
+    <script src="@Url.Content("~/Scripts/datatables.js")"></script>
+    <link href="@Url.Content("~/Content/DataTables-1.10.18/css/dataTables.bootstrap4.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Content/DataTables-1.10.18/js/dataTables.bootstrap4.js")"></script>
+    <link href="~/Content/css/select2.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.js"></script>
+    <script>
+          $(function () {
+              $(document).tooltip({
+                  position: {
+                      my: "center bottom-20",
+                      at: "center top",
+                      using: function (position, feedback) {
+                          $(this).css(position);
+                          $("<div>")
+                              .addClass("arrow")
+                              .addClass(feedback.vertical)
+                              .addClass(feedback.horizontal)
+                              .appendTo(this);
+                      }
+                  }
+              });
+          });
+    </script>
+    <style>
+        .ui-tooltip, .arrow:after {
+            background: white !important;
+            border: 2px solid white;
+        }
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        .ui-tooltip {
+            padding: 5px 10px;
+            color: black;
+            border-radius: 20px;
+            font: bold 10px "Helvetica Neue", Sans-Serif;
+            text-transform: uppercase;
+            box-shadow: 0 0 5px #343a40 !important;
+        }
+
+        .arrow {
+            width: 70px;
+            height: 16px;
+            overflow: hidden;
+            position: absolute;
+            left: 50%;
+            margin-left: -35px;
+            bottom: -16px;
+        }
+
+            .arrow.top {
+                top: -16px;
+                bottom: auto;
+            }
+
+            .arrow.left {
+                left: 20%;
+            }
+
+            .arrow:after {
+                content: "";
+                position: absolute;
+                left: 20px;
+                top: -20px;
+                width: 25px;
+                height: 25px;
+                box-shadow: 6px 5px 9px -9px black;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+
+            .arrow.top:after {
+                bottom: -20px;
+                top: auto;
+            }
+    </style>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

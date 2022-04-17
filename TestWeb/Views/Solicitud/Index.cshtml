@@ -1,0 +1,190 @@
+﻿@using Model
+@using System.Configuration
+@model List<SolicitudIndexModel>
+
+@{
+    ViewBag.Title = "Solicitudes";
+}
+
+<h2>Solicitudes</h2>
+
+<div>
+    <a href="~/Solicitud/Create" title="Nueva Solicitud" class="btn btn-primary">
+        <i class="glyphicon glyphicon-plus"></i>
+    </a>
+</div>
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(x => x.First().id)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().nombre_solic)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().nombre_benef)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().validez)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().tipoSolic)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().area)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().estado)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().fechaSolicitud)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre_solic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre_benef)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.validez)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tipoSolic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.area)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fechaSolicitud)
+                </td>
+                <td class="col-2">
+                @if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")))
+                {
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="form-row">
+                                @if (Model.ToList().Where(x => x.id == item.id).Single().estado.Equals("Aprobada"))
+                                {
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                                            <i class="glyphicon glyphicon-th-list"></i>
+                                        </a>
+                                    </div>
+                                            <div class="col-auto">
+                                                <a href="~/Solicitud/Planilla/@item.id" title="Crear Cuenta" class="btn btn-success">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                </a>
+                                            </div>
+
+                                }
+                                else if (Model.ToList().Where(x => x.id == item.id).Single().estado.Equals("Ejecutada"))
+                                {
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                                            <i class="glyphicon glyphicon-th-list"></i>
+                                        </a>
+                                    </div>
+                                            <div class="col-auto">
+                                                <a href="~/Solicitud/PrintViewToPdf/@item.id" title="Guardar Planilla" class="btn btn-primary">
+                                                    <i class="glyphicon glyphicon-save"></i>
+                                                </a>
+                                            </div>
+
+                                }
+                                else
+                                {
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                                            <i class="glyphicon glyphicon-th-list"></i>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("8834006e-f16c-4f30-a924-ee00c2992b71")))
+                {
+                    <div class="form-group">
+                        @if (Model.ToList().Where(x => x.id == item.id).Single().estado.Equals("Solicitada"))
+                        {
+                            <div class="container-fluid">
+                                <div class="form-row">
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                                            <i class="glyphicon glyphicon-th-list"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Aprobar/@item.id" title="Aprobar" class="btn btn-success">
+                                            <i class="glyphicon glyphicon-ok"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Rechazar/@item.id" title="Rechazar" class="btn btn-danger">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-auto">
+                                <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                                    <i class="glyphicon glyphicon-th-list"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-auto">
+                        <a href="~/Solicitud/Details/@item.id" title="Detalles" class="btn btn-info">
+                            <i class="glyphicon glyphicon-th-list"></i>
+                        </a>
+                    </div>
+                }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <a href="~/Home/" title="Inicio" class="btn btn-secondary">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    jQuery(function ($) {
+        $('.table').DataTable({
+            "order": [[7, "desc"]]
+        });
+    });
+
+</script>
+

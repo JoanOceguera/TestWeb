@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IncideModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="id_area" />
+          </Key>
+          <Property Name="id_area" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_agrup_nom" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="Persona_jefe" Type="int" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="id_Persona" />
+          </Key>
+          <Property Name="id_Persona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_Grupo" Type="int" />
+          <Property Name="exp" Type="int" Nullable="false" />
+          <Property Name="ci" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="id_area" Type="int" />
+          <Property Name="activo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Area_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Area" Type="Self.Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="id_Persona" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="Persona_jefe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="0..1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="id_area" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="id_area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IncideModelStoreContainer">
+          <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Area_Persona" Association="Self.FK_Area_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Area" Association="Self.FK_Persona_Area">
+            <End Role="Area" EntitySet="Area" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IncideModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="PlantillaporArea_Result">
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Exp" Type="Int32" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="id_area" />
+          </Key>
+          <Property Name="id_area" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_agrup_nom" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Persona_jefe" Type="Int32" />
+          <NavigationProperty Name="Persona" Relationship="Self.FK_Area_Persona" FromRole="Area" ToRole="Persona" />
+          <NavigationProperty Name="Persona1" Relationship="Self.FK_Persona_Area" FromRole="Area" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="id_Persona" />
+          </Key>
+          <Property Name="id_Persona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_Grupo" Type="Int32" />
+          <Property Name="exp" Type="Int32" Nullable="false" />
+          <Property Name="ci" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_area" Type="Int32" />
+          <Property Name="activo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Area" Relationship="Self.FK_Area_Persona" FromRole="Persona" ToRole="Area" />
+          <NavigationProperty Name="Area1" Relationship="Self.FK_Persona_Area" FromRole="Persona" ToRole="Area" />
+        </EntityType>
+        <Association Name="FK_Area_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Area" Type="Self.Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="id_Persona" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="Persona_jefe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="0..1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="id_area" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="id_area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IncideEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Area" EntityType="Self.Area" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" />
+          <AssociationSet Name="FK_Area_Persona" Association="Self.FK_Area_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Area" Association="Self.FK_Persona_Area">
+            <End Role="Area" EntitySet="Area" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <FunctionImport Name="PlantillaporArea" IsComposable="true" ReturnType="Collection(IncideModel.PlantillaporArea_Result)">
+            <Parameter Name="Area" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IncideModelStoreContainer" CdmEntityContainer="IncideEntities">
+          <EntitySetMapping Name="Area">
+            <EntityTypeMapping TypeName="IncideModel.Area">
+              <MappingFragment StoreEntitySet="Area">
+                <ScalarProperty Name="id_area" ColumnName="id_area" />
+                <ScalarProperty Name="id_agrup_nom" ColumnName="id_agrup_nom" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="Persona_jefe" ColumnName="Persona_jefe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona">
+            <EntityTypeMapping TypeName="IncideModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="id_Persona" ColumnName="id_Persona" />
+                <ScalarProperty Name="id_Grupo" ColumnName="id_Grupo" />
+                <ScalarProperty Name="exp" ColumnName="exp" />
+                <ScalarProperty Name="ci" ColumnName="ci" />
+                <ScalarProperty Name="id_area" ColumnName="id_area" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

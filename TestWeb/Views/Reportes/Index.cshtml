@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Reportes";
+}
+<br />
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header text-center font-weight-bold">
+                Cuentas Activas
+            </div>
+            <div class="card-body">
+                <p>Sección que permite consultar las cuentas activas en el sistema y filtrarlas por servicios</p>
+                <div class="container">
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            @Html.ActionLink("Cuentas Activas", "CuentasActivas", "Reportes", null, new { @class = "btn btn-primary btn-lg", @role = "button" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header font-weight-bold text-center">
+                Cuentas
+            </div>
+            <div class="card-body">
+                <p>Sección que permite consultar todas las cuentas en el sistema y filtrarlas por servicios</p>
+                <div class="container">
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            @Html.ActionLink("Cuentas ", "Cuentas", "Reportes", null, new { @class = "btn btn-primary btn-lg", @role = "button" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <a href="~/Home/" title="Inicio" class="btn btn-secondary">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+        </a>
+    </div>
+</div>
+

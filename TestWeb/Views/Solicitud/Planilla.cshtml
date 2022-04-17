@@ -1,0 +1,1415 @@
+﻿@using Model
+@using System.Configuration
+@model PlanillaViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Planilla " + Model.nombre_benef + " " + Model.apellido1_benef + " " + Model.apellido2_benef;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Planilla</title>
+
+</head>
+<body>
+    <br />
+    @using (Html.BeginForm("PrintViewToPdf", "Solicitud", FormMethod.Post, new { id = "form-solicitud", novalidate = true }))
+    {
+        <div class="row container-fluid">
+            <div class="rounded mx-auto d-block">
+                <img class="img-fluid" style="height:100px" src='~/Fotos/cropped-identificador-fondo-blanco.jpg' />
+            </div>
+            <br />
+            <div class="container">
+                <div class="text-center">
+                    <h2>
+                        Solicitud de Servicios de Red
+                    </h2>
+                </div>
+
+            </div>
+            <br />
+            <div class="container">
+                <div class="font-weight-bold font-italic">
+                    <p>
+                        Datos Personales y Laborales
+                    </p>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <table class="table table-bordered table-sm" style="border-color:#000000; border-style:solid; border-width:3px">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <small>
+                                    Primer Apellido
+                                </small>
+                                <br />
+                                <label id="apellido1Bef">
+                                    @Model.apellido1_benef
+                                </label>
+                            </td>
+                            <td>
+                                <small>
+                                    Segundo Apellido
+                                </small>
+                                <br />
+                                <label id="apellido2Bef">
+                                    @Model.apellido2_benef
+                                </label>
+                            </td>
+                            <td>
+                                <small>
+                                    Nombre
+                                </small>
+                                <br />
+                                <label id="nombreBef">
+                                    @Model.nombre_benef
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>
+                                    Número de Solapín
+                                </small>
+                                <br />
+                                <label>
+                                    @Model.exp
+                                </label>
+                            </td>
+                            <td>
+                                <small>
+                                    Cargo
+                                </small>
+                                <br />
+                                <label>
+                                    @Model.cargo_benef
+                                </label>
+                            </td>
+                            <td>
+                                <small>
+                                    Departamento/Área/Grupo
+                                </small>
+                                <br />
+                                <label>
+                                    @Model.area
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row container-fluid">
+            <div class="col-7">
+                <table class="table table-striped" width="60" align="center" cellpadding="0" style="border-bottom-color:#000000;border-bottom-style:solid;border-top-color:#000000;border-top-style:solid; border-left-color:#000000; border-left-style:solid;border-right-color:#000000; border-right-style:solid;">
+                    <tbody>
+                        <tr>
+                            @if (!ViewBag.detalle)
+                            {
+                                <td style="height:265px">
+                                    <div class="container-fluid h-100">
+                                        <div class="row h-100">
+                                            <div class="col-sm-5 col-2 h-100 flex-column justify-content-center" id="left">
+                                                <div class="col">
+                                                    <label class="font-weight-bold">
+                                                        Tipo de Personal
+                                                    </label>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("d"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="d" name="tpers" checked>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="d" name="tpers">
+                                                            }
+                                                            Dirigente
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("e"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="e" name="tpers" checked>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="e" name="tpers">
+                                                            }
+                                                            Especialista
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("t"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="t" name="tpers" checked>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="t" name="tpers">
+                                                            }
+                                                            Técnico
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("o"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="o" name="tpers" checked>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="o" name="tpers">
+                                                            }
+                                                            Otros
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row col">
+                                                    <div class="col">
+                                                        <label class="font-weight-bold">
+                                                            Roles en la PC
+                                                        </label>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc == "u")
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC">
+                                                                }
+                                                                Usuario
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc == "ua")
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC">
+                                                                }
+                                                                Usuario Avanzado
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc == "a")
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="a" name="rolPC" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="a" name="rolPC">
+                                                                }
+                                                                Administrador
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="col" style="border-color:#000000; border-style:solid; border-width:2px" id="divServ">
+                                                    <label class="form-check-label font-weight-bold">
+                                                        Tipo de Servicios
+                                                    </label>
+                                                    <br />
+                                                    @for (int i = 0; i < ViewBag.Servicios.Count; i++)
+                                                    {
+                                                        var item = ViewBag.Servicios[i];
+                                                        var seleccionado = false;
+                                                        foreach (var item2 in Model.servicios)
+                                                        {
+                                                            if (item.id == item2.Key)
+                                                            {
+                                                                seleccionado = true;
+                                                                break;
+                                                            }
+
+                                                        }
+                                                        if (i == ViewBag.Servicios.Count - 1)
+                                                        {
+                                                            <div class="form-check form-check">
+                                                                <input class="form-check-input" @(seleccionado ? "checked" : "") type="checkbox" value=@item.id name="servicios[]" required />
+                                                                <label class="form-check-label">
+                                                                    @item.nombre
+                                                                </label>
+                                                                <div class="invalid-feedback">
+                                                                    Debe seleccionar al menos un servicio
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" @(seleccionado ? "checked" : "") type="checkbox" value=@item.id name="servicios[]" required />
+                                                                <label class="form-check-label">
+                                                                    @item.nombre
+                                                                </label>
+                                                            </div>
+                                                            <br />
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="height:265px">
+                                    <div class="container-fluid h-100">
+                                        <div class="row h-100">
+                                            <div class="col-sm-5 col-2 h-100 flex-column justify-content-center" id="left">
+                                                <div class="col">
+                                                    <label class="font-weight-bold">
+                                                        Tipo de Personal
+                                                    </label>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("d"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="d" name="tpers" checked disabled>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="d" name="tpers" disabled>
+                                                            }
+                                                            Dirigente
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("e"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="e" name="tpers" checked disabled>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="e" name="tpers" disabled>
+                                                            }
+                                                            Especialista
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("t"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="t" name="tpers" checked disabled>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="t" name="tpers" disabled>
+                                                            }
+                                                            Técnico
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            @if (Model.tpersonal.Equals("o"))
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="o" name="tpers" checked disabled>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-check-input" type="radio" value="o" name="tpers" disabled>
+                                                            }
+                                                            Otros
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row col">
+                                                    <div class="col">
+                                                        <label class="font-weight-bold">
+                                                            Roles en la PC
+                                                        </label>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc.Equals("u"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" disabled>
+                                                                }
+                                                                Usuario
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc.Equals("ua"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="ua" name="rolPC" disabled>
+                                                                }
+                                                                Usuario Avanzado
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.rolpc.Equals("a"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="a" name="rolPC" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" value="a" name="rolPC" disabled>
+                                                                }
+                                                                Administrador
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="col" style="border-color:#000000; border-style:solid; border-width:2px" id="divServ">
+                                                    <label class="form-check-label font-weight-bold">
+                                                        Tipo de Servicios
+                                                    </label>
+                                                    <br />
+                                                    @for (int i = 0; i < ViewBag.Servicios.Count; i++)
+                                                    {
+                                                        var item = ViewBag.Servicios[i];
+                                                        var seleccionado = false;
+                                                        foreach (var item2 in Model.servicios)
+                                                        {
+                                                            if (item.id == item2.Key)
+                                                            {
+                                                                seleccionado = true;
+                                                                break;
+                                                            }
+
+                                                        }
+                                                        if (i == ViewBag.Servicios.Count - 1)
+                                                        {
+                                                            <div class="form-check form-check">
+                                                                <input class="form-check-input" @(seleccionado ? "checked" : "") type="checkbox" value=@item.id name="servicios[]" required disabled/>
+                                                                <label class="form-check-label">
+                                                                    @item.nombre
+                                                                </label>
+                                                                <div class="invalid-feedback">
+                                                                    Debe seleccionar al menos un servicio
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" @(seleccionado ? "checked" : "") type="checkbox" value=@item.id name="servicios[]" required disabled/>
+                                                                <label class="form-check-label">
+                                                                    @item.nombre
+                                                                </label>
+                                                            </div>
+                                                            <br />
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                            
+                        </tr>
+                        <tr style="border-color:#000000; border-style:solid; border-width:2px">
+                            <td>
+                                <label class="font-weight-bold">
+                                    Tipo de Solicitud
+                                </label>
+                            </td>
+                        </tr>
+                        <tr style="border-color:#ff0000">
+                            <td>
+                                <div class="row col">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            @if (ViewBag.detalle)
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("c"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked disabled>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" disabled>
+                                                    }
+                                                    Creación de Usuario NO Existente
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("c"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck">
+                                                    }
+                                                    Creación de Usuario NO Existente
+                                                </label>
+                                            }
+                                            
+                                        </div>
+                                        <br />
+                                        <div class="form-check">
+                                            @if (ViewBag.detalle)
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("m"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked disabled>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" disabled>
+                                                    }
+                                                    Modificacion de Privilegios de un usuario existente
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("m"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck">
+                                                    }
+                                                    Modificacion de Privilegios de un usuario existente
+                                                </label>
+                                            }
+                                        </div>
+                                        <br />
+                                        <div class="form-check">
+                                            @if (ViewBag.detalle)
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("r"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked disabled>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" disabled>
+                                                    }
+                                                    Renovacion del Servicio a un usuario existente
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="form-check-label">
+                                                    @if (Model.tipoSolic.Equals("r"))
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck" checked>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" value="" name="creacionCheck">
+                                                    }
+                                                    Renovacion del Servicio a un usuario existente
+                                                </label>
+                                            }
+                                        </div>
+                                        <br />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-5">
+                <table class="table table-striped" width="60" align="center" cellspacing="10" cellpadding="0" style="border-bottom-color:#000000;border-bottom-width:3px;border-bottom-style:solid;border-top-color:#000000;border-top-style:solid;border-top-width:3px; border-left-color:#000000; border-left-width:3px;border-left-style:solid;border-right-color:#000000; border-right-width:3px;border-right-style:solid; height:495px">
+                    <tbody>
+                        <tr>
+                            <td style="height:265px">
+                                <div class="container">
+                                    <label class="font-italic">
+                                        Solo para el Administrador
+                                    </label>
+                                    <br />
+                                    <label class="font-weight-bold">
+                                        Usuario de Red
+                                    </label>
+                                    <small class="font-italic">
+                                        (Su empleo es personal e intransferible)
+                                    </small>
+                                    <br />
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">
+                                            Usuario:
+                                        </label>
+                                        <div class="col-sm-10">
+                                            @switch (Model.tipoSolic)
+                                            {
+                                                case ("c"):
+                                                    if (!ViewBag.detalle)
+                                                    {
+                                                        <input type="text" name="nombre_usuario" id="textNombre" class="form-control col-auto" value="@Model.nombre_usuario" required />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" name="nombre_usuario" id="textNombre" class="form-control-plaintext col-auto" value="@Model.nombre_usuario" required />
+                                                    }
+                                                    break;
+
+                                                case ("m"):
+                                                    <input type="text" name="nombre_usuario" id="textNombre" class="form-control-plaintext col-auto" value="@Model.nombre_usuario" required />
+                                                    break;
+
+                                                case ("r"):
+                                                    <input type="text" name="nombre_usuario" id="textNombre" class="form-control-plaintext col-auto" value="@Model.nombre_usuario" required />
+                                                    break;
+                                            }
+                                        </div>                                        
+                                        <div class="invalid-feedback">
+                                            Por favor, escriba un nombre de usuario
+                                        </div>
+                                    </div>
+                                    <label class="font-weight-bold">
+                                        Deshabilitar cuenta y servicios por:
+                                    </label>
+                                    <div class="container-fluid h-100 small">
+                                        <div class="row h-100">
+                                            @if (Model.razonDesh != null)
+                                            {
+                                                if (ViewBag.detalle)
+                                                {
+                                                    <div class="col-6 h-100 flex-column" id="left">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("cm"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="cm" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="cm" disabled>
+                                                                }
+                                                                Certificado Medico
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("se"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="se" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="se" disabled>
+                                                                }
+                                                                Salida al Exterior
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("lm"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lm" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lm" disabled>
+                                                                }
+                                                                Licencia Maternidad
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("o"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="o" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="o" disabled>
+                                                                }
+                                                                Otros
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("m"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="m" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="m" disabled>
+                                                                }
+                                                                Movilización
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("lss"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lss" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lss" disabled>
+                                                                }
+                                                                Licencia sin Sueldo
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("md"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="md" checked disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="md" disabled>
+                                                                }
+                                                                Medida Disciplinaria
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-6 h-100 flex-column" id="left">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("cm"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="cm" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="cm">
+                                                                }
+                                                                Certificado Medico
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("se"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="se" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="se">
+                                                                }
+                                                                Salida al Exterior
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("lm"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lm" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lm">
+                                                                }
+                                                                Licencia Maternidad
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("be"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="be" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="be">
+                                                                }
+                                                                Baja de la Entidad
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("m"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="m" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="m">
+                                                                }
+                                                                Movilización
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("lss"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lss" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="lss">
+                                                                }
+                                                                Licencia sin Sueldo
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("md"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="md" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="md">
+                                                                }
+                                                                Medida Disciplinaria
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @if (Model.razonDesh.Equals("o"))
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="o" checked>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="form-check-input" type="radio" name="razonDesh" value="o">
+                                                                }
+                                                                Otros
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <div class="col-6 h-100 flex-column" id="left">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="cm" disabled>
+                                                            Certificado Medico
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="se" disabled>
+                                                            Salida al Exterior
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="lm" disabled>
+                                                            Licencia Maternidad
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="be" disabled>
+                                                            Baja de la Entidad
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="m" disabled>
+                                                            Movilización
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="lss" disabled>
+                                                            Licencia sin Sueldo
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="md" disabled>
+                                                            Medida Disciplinaria
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="razonDesh" value="o" disabled>
+                                                            Otros
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                    @if (Model.fechaInicio != null)
+                                    {
+                                        <div class="font-weight-bold">
+                                            <span class="input-group-addon">Desde</span>
+                                            <label name="start">@(((DateTime)Model.fechaInicio).ToShortDateString())</label>
+                                            <span class="input-group-addon">hasta</span>
+                                            <label name="end">@(((DateTime)Model.fechaFin).ToShortDateString())</label>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="border-color:#000000; border-style:solid; border-width:2px; height:50px">
+                            <td>
+                                <label class="font-weight-bold">
+                                    Validez de la Solicitud
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height:110px">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <label class="small">
+                                            Mientras Mantenga Vinculo Laboral
+                                        </label>
+                                    </div>
+                                    <div class="container form-check col-4 small">
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                @if (ViewBag.detalle)
+                                                {
+                                                    if (Model.validez == null)
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" checked disabled>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" disabled>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Model.validez == null)
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" checked>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl">
+                                                    }
+                                                }
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                @if (ViewBag.detalle)
+                                                {
+                                                    if (Model.validez == null)
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" disabled>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" checked disabled>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Model.validez == null)
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl">
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="radio" name="durationOption" value="vl" checked>
+                                                    }
+                                                }
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="" style="height: 1px; border: 0; background-color: black;" />
+                                <div class="container-fluid small">
+                                    <div class="row">
+                                        <div>
+                                            <p>
+                                                Hasta la fecha definida por el representante administrativo para asegurar las funciones o tareas asignadas al usuario:
+                                            </p>
+                                        </div>
+                                        <div>
+                                            @if (Model.validez != null)
+                                            {
+                                                <label class="font-weight-bold">@(((DateTime)Model.validez).ToShortDateString())</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="font-weight-bold">
+
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="container-fluid">
+            @if (!ViewBag.detalle)
+            {
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="container-fluid h-100">
+                                    <div class="row" style="height:350px">
+                                        <div class="col-6 flex-column" style="border-top:solid;border-bottom:solid;border-left:solid; border-color:black;border-right:solid;border-right-width:1px;border-right-color:#ccc;">
+                                            <label class="font-weight-bold">
+                                                El Usuario:
+                                            </label>
+                                            <p>
+                                                Manifestó que los datos arriba expuestos se ajustan a la realidad y regiran
+                                                su comportamiento durante el empleo de las Tecnologías de la Información y las
+                                                Comunicaciones (TIC´s) de la Red del CIE.
+                                            </p>
+                                            <p>
+                                                Queda comprometido además a no divulgar a través de la RED hacia el exterior,
+                                                ninguna informacion de carácter oficial o sensible por su contenido, que pueda
+                                                constituir patrimonio de la entidad.
+                                            </p>
+                                            <p>
+                                                Se compromete bajo firma a cumplir el Código de Ética como usuario de la Red y
+                                                el Reglamento Interno vigente, que regulan el uso de las TIC´s en el CIE.
+                                            </p>
+                                            <div class="container-fluid h-100">
+                                                <div class="row h-100">
+                                                    <div class="col-5">
+                                                        <label>
+                                                            Fecha: _________________
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <label>
+                                                            Firma del Usuario: _________________
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="col-6" id="tablaFirma" style="border-top:solid;border-bottom:solid;border-right:solid;border-color:black; width:510px; height:350px">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-center font-weight-bold" style="background-color:#ccc">
+                                                        <text>Dirigente que Solicita</text>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:white; border-bottom:solid; border-bottom-color:#ccc; border-bottom-width:2px">
+                                                        <div class="container-fluid h-100">
+                                                            <div class="row h-100">
+                                                                <div class="col-5 h-100 flex-column">
+                                                                    <text class="small">
+                                                                        Nombre y Apellidos
+                                                                    </text>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <text class="small">
+                                                                        @Model.nombre_solic
+                                                                    </text>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:white; border-bottom:solid; border-bottom-color:#ccc; border-bottom-width:2px">
+                                                        <div class="container-fluid h-100">
+                                                            <div class="row h-100">
+                                                                <div class="col-5 h-100 flex-column">
+                                                                    <text class="small">
+                                                                        Cargo
+                                                                    </text>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <text class="small">
+                                                                        @Model.cargo_solic
+                                                                    </text>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:white; border-bottom:solid; border-bottom-color:#ccc; border-bottom-width:2px">
+                                                        <div class="container-fluid h-100">
+                                                            <div class="row h-100">
+                                                                <div class="col-5 h-100 flex-column">
+                                                                    <text class="small">
+                                                                        Fecha y Firma
+                                                                    </text>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <text>
+
+                                                                    </text>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center font-weight-bold" style="background-color:#ccc">
+                                                        Vicedirector de Informática y Comunicaciones
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:white; border-bottom:solid; border-bottom-color:#ccc; border-bottom-width:2px">
+                                                        <div class="container-fluid h-100">
+                                                            <div class="row h-100">
+                                                                <div class="col-5 h-100 flex-column">
+                                                                    <text class="small">
+                                                                        Firma y Fecha
+                                                                    </text>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <text>
+
+                                                                    </text>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center font-weight-bold" style="background-color:#ccc">
+                                                        Director General
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:white; border-bottom:solid; border-bottom-color:#ccc; border-bottom-width:2px">
+                                                        <div class="container-fluid h-100">
+                                                            <div class="row h-100">
+                                                                <div class="col-5 h-100 flex-column">
+                                                                    <text class="small">
+                                                                        Firma y Fecha
+                                                                    </text>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <text>
+
+                                                                    </text>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <fieldset class="p-3" style="width:1175px;border:solid;border-width:3px;border-color:black">
+                    <legend class="w-auto">
+                       Datos de la Solicitud
+                    </legend>
+                    <div class="container-fluid h-100">
+                        <div class="row">
+                            <div class="col-6 flex-column">
+                                <div>
+                                    <label class="text-center">
+                                        <text class="font-weight-bold">Fecha de la Solicitud:</text>
+                                        <text>@(((DateTime)Model.fechaSolicitud).ToShortDateString())</text>
+                                    </label>
+                                </div>
+                                <br />
+                                <div>
+                                    <label class="text-center">
+                                        <text class="font-weight-bold">Fecha de Aprobación:</text>
+                                        @if (Model.fechaAprobacion != null)
+                                        {
+                                            @(((DateTime)Model.fechaAprobacion).ToShortDateString())
+                                        }
+                                        else if (Model.estado.Equals("Rechazada"))
+                                        {
+                                            @("La solicitud fue rechazada")
+                                        }
+                                        else
+                                        {
+                                            @("La solicitud no se ha aprobado")
+                                        }
+                                    </label>
+                                </div>
+                                <br />
+                                <div>
+                                    <label class="text-center">
+                                        <text class="font-weight-bold">Fecha de Ejecución:</text>
+                                        @if (Model.fechaEjecucion != null)
+                                        {
+                                            @(((DateTime)Model.fechaEjecucion).ToShortDateString())
+                                        }
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-center font-weight-bold">
+                                    <text>Dirigente que Solicita</text>
+                                </label>
+                                <div class="col-auto">
+                                    <text>
+                                        @Model.nombre_solic
+                                    </text>
+                                </div>
+                                <div class="col-auto">
+                                    <text>
+                                        @Model.cargo_solic
+                                    </text>
+                                </div>
+                                <br />
+                                <label class="text-center font-weight-bold">
+                                    <text>Usuario que Solicitó:</text>
+                                </label>
+                                <div class="col-auto">
+                                    <text>
+                                        @Model.usuario
+                                    </text>
+                                </div>
+                                <div class="col-auto">
+                                    <text>
+                                        @Model.cargoUsuario
+                                    </text>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </fieldset>
+                
+            }
+
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="container-fluid">
+                @if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("11843472-ae59-423a-9ec4-6bca52a29b02")))
+                {
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            @if (!ViewBag.detalle)
+                            {
+                                <div class="form-row">
+                                    <div class="col-auto">
+                                        <input type="submit" value="Guardar Planilla" class="btn btn-primary" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+                                            <i class="glyphicon glyphicon-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-row">
+                                    @if (Model.estado.Equals("Ejecutada"))
+                                    {
+                                        <div class="col-auto">
+                                            <a href="~/Solicitud/PrintViewToPdf/@Model.id_solic" title="Guardar Planilla" class="btn btn-primary">
+                                                <i class="glyphicon glyphicon-save"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+                                            <i class="glyphicon glyphicon-arrow-left"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else if (CurrentUser.Get.Role.Equals(ConfigurationManager.AppSettings.Get("d1bf455f-ee28-4e27-ab73-e98ba27269a2")))
+                {
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="form-row">
+                                <div class="col-auto">
+                                    <a href="~/Solicitud/" title="Solicitudes" class="btn btn-secondary">
+                                        <i class="glyphicon glyphicon-arrow-left"></i>
+                                    </a>
+                                </div>
+                                @if (Model.estado.Equals("Solicitada"))
+                                {
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Aprobar/@Model.id_solic" title="Aprobar" class="btn btn-success">
+                                            <i class="glyphicon glyphicon-ok"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="~/Solicitud/Rechazar/@Model.id_solic" title="Rechazar" class="btn btn-danger">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+       
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row">
+                        <div class="col-auto">
+                            <a href="~/Solicitud/@("?area=" + CurrentUser.Get.area)" title="Solicitudes" class="btn btn-secondary">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                }      
+            </div>
+        </div>
+        <input type="text" value="@Model.id_solic" name="id_solic" hidden/>
+    }
+    <script type="text/javascript">
+        var requiredCheckboxes = $('#divServ :checkbox[required]');
+        if (requiredCheckboxes.is(':checked')) 
+        {
+            requiredCheckboxes.removeAttr('required');
+        }
+        else
+        {
+            requiredCheckboxes.attr('required', 'required');
+        }
+
+        $(function () {
+
+            requiredCheckboxes.change(function () {
+                if (requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
+        var sugerencias = [];
+        var nombreBef = document.querySelector("#nombreBef").innerText;
+        var apellido1Bef = document.querySelector("#apellido1Bef").innerText;
+        var apellido2Bef = document.querySelector("#apellido2Bef").innerText;
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Nombres", "Solicitud")',
+                data: { nombre: nombreBef, apellido1: apellido1Bef, apellido2: apellido2Bef},
+                dataType: "json",
+                success: function (resultado)
+                {
+                    sugerencias = resultado;
+                }
+            });
+
+            $(document).ready(function ()
+            {
+                $(function () {
+                    var requiredCheckboxes = $('#divServ :checkbox[required]');
+                    requiredCheckboxes.change(function () {
+                        if (requiredCheckboxes.is(':checked')) {
+                            requiredCheckboxes.removeAttr('required');
+                        } else {
+                            requiredCheckboxes.attr('required', 'required');
+                        }
+                    });
+                });
+            $("#textNombre").autocomplete({
+                source: sugerencias
+                });
+
+            $("#textNombre").change(function () {
+               var nombre = document.querySelector("#nombreSolicitud");
+               $.ajax({
+                type: 'GET',
+                url: '@Url.Action("comprobar_Nombre", "Solicitud")',
+                data: { nombre: $("#textNombre").val()},
+                dataType: "json",
+                success: function (resultado)
+                {
+                    if (resultado)
+                    {
+                        alert("El nombre de usuario seleccionado ya existe, por favor escoja otro");
+                        var texto = document.querySelector("#textNombre");
+                        texto.value = "";
+                    }
+                        
+                }
+            });
+            });
+        });
+    </script>
+    <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function () {
+                'use strict';
+
+                window.addEventListener('load', function () {
+                    var form = document.getElementById('form-solicitud');
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                }, false);
+            })();
+    </script>
+    <style>
+        .table-striped > tbody > tr:nth-child(odd) > td,
+        .table-striped > tbody > tr:nth-child(odd) > th {
+            background-color: #fff;
+        }
+
+        .table-striped > tbody > tr:nth-child(even) > td,
+        .table-striped > tbody > tr:nth-child(even) > th {
+            background-color: #ccc;
+        }
+
+        .table-striped > thead > tr > th {
+            background-color: #eee;
+        }
+    </style>
+</body>
+</html>
+

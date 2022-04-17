@@ -1,0 +1,96 @@
+﻿@using Model
+@model List<UsuarioIndexModel>
+@{
+    ViewBag.Title = "Usuarios";
+}
+<h2>Usuarios</h2>
+<div>
+    <a href="~/Account/Register" title="Añadir" class="btn btn-primary">
+        <i class="glyphicon glyphicon-plus"></i>
+    </a>
+</div>
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(x => x.First().UserName)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().email)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().exp)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().area)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().rol)
+            </th>
+            <th>
+                @Html.LabelFor(x => x.First().activo)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @item.email
+                </td>
+                <td>
+                    @item.exp
+                </td>
+                <td>
+                    @item.area
+                </td>
+                <td>
+                    @item.rol
+                </td>
+                <td>
+                    @(item.activo ? "Activo" : "Inactivo")
+                </td>
+                <td>
+                    <div class="col-auto">
+                        <a href="~/User/Edit/@item.id" title="Editar" class="btn btn-secondary">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        @if (item.activo)
+                        {
+                            <a href="~/User/Delete/@item.id" title="Desactivar" class="btn btn-danger">
+                                <i class="glyphicon glyphicon-minus"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="~/User/Activate/@item.id" title="Activar" class="btn btn-success">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>
+                        }
+
+                   </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<div class="col-auto">
+    <a href="~/User/" title="Usuarios" class="btn btn-secondary">
+        <i class="glyphicon glyphicon-arrow-left"></i>
+    </a>
+</div>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('.table').DataTable();
+    });
+</script>
+

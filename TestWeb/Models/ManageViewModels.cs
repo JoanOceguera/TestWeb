@@ -58,6 +58,23 @@ namespace TestWeb.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ChangeUserNameViewModel
+    {
+
+        [Required]
+        [Display(Name = "Nombre de usuario nuevo")]
+        public int NewUserName { get; set; }
+    }
+
+    public class ChangeEmailViewModel
+    {
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Correo nuevo")]
+        public string NewEmail { get; set; }
+    }
+
     public class AddPhoneNumberViewModel
     {
         [Required]
@@ -82,5 +99,64 @@ namespace TestWeb.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    public class AddRolViewModel
+    {
+        [Required]
+        [Display (Name = "Nombre")]
+        public string Name { get; set; }
+    }
+
+    public class EditUserViewModel
+    {
+        [Required]
+        public string id { get; set; }
+
+        [Required]
+        [Display(Name = "Nombre de Usuario")]
+        public string UserName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Correo")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Expediente")]
+        public int exp { get; set; }
+
+        [Required]
+        [Display(Name = "Área")]
+        public int area { get; set; }
+
+        [Required]
+        [Display(Name = "Carnet de Identidad")]
+        public string carneId { get; set; }
+    }
+
+    public class ChangeRolViewModel
+    {
+
+        [Required]
+        [Display(Name = "Nombre de Usuario")]
+        public string UserId { get; set; }
+
+        [Required]
+        [Display(Name = "Rol")]
+        public string Rol { get; set; }
+
+    }
+
+    public class EditRolViewModel
+    {
+        [Required]
+        public string Id { get; set; }
+
+        [Required]
+        [Display(Name = "Nombre")]
+        public string name { get; set; }
+
+
     }
 }

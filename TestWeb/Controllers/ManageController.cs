@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TestWeb.Models;
+using System.Net.Mail;
+using Model;
 
 namespace TestWeb.Controllers
 {
@@ -15,15 +17,17 @@ namespace TestWeb.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public ManageController()
         {
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            RoleManager = roleManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -37,7 +41,6 @@ namespace TestWeb.Controllers
                 _signInManager = value; 
             }
         }
-
         public ApplicationUserManager UserManager
         {
             get
@@ -49,18 +52,30 @@ namespace TestWeb.Controllers
                 _userManager = value;
             }
         }
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
+            }
+        }
 
-        //
-        // GET: /Manage/Index
+        [Authorize]
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Su contraseña se ha cambiado."
+                message == ManageMessageId.ChangePasswordSuccess ? "Su contraseña se ha cambiado satisfactoriamente."
                 : message == ManageMessageId.SetPasswordSuccess ? "Su contraseña se ha establecido."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Su proveedor de autenticación de dos factores se ha establecido."
                 : message == ManageMessageId.Error ? "Se ha producido un error."
                 : message == ManageMessageId.AddPhoneSuccess ? "Se ha agregado su número de teléfono."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Se ha quitado su número de teléfono."
+                : message == ManageMessageId.ChangeUserNameSuccess ? "Su nombre de usuario se ha cambiado satisfactoriamente."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Su correo se ha cambiado satisfactoriamente."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -75,8 +90,7 @@ namespace TestWeb.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Manage/RemoveLogin
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
@@ -99,15 +113,14 @@ namespace TestWeb.Controllers
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
-        //
-        // GET: /Manage/AddPhoneNumber
+        [HttpGet]
+        [Authorize]
         public ActionResult AddPhoneNumber()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/AddPhoneNumber
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
@@ -130,8 +143,7 @@ namespace TestWeb.Controllers
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
 
-        //
-        // POST: /Manage/EnableTwoFactorAuthentication
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
@@ -145,8 +157,7 @@ namespace TestWeb.Controllers
             return RedirectToAction("Index", "Manage");
         }
 
-        //
-        // POST: /Manage/DisableTwoFactorAuthentication
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
@@ -160,8 +171,8 @@ namespace TestWeb.Controllers
             return RedirectToAction("Index", "Manage");
         }
 
-        //
-        // GET: /Manage/VerifyPhoneNumber
+        [HttpGet]
+        [Authorize]
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
@@ -169,8 +180,7 @@ namespace TestWeb.Controllers
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
-        //
-        // POST: /Manage/VerifyPhoneNumber
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
@@ -194,8 +204,7 @@ namespace TestWeb.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Manage/RemovePhoneNumber
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemovePhoneNumber()
@@ -213,15 +222,14 @@ namespace TestWeb.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        //
-        // GET: /Manage/ChangePassword
+        [Authorize]
+        [HttpGet]
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/ChangePassword
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -236,6 +244,29 @@ namespace TestWeb.Controllers
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
+                    await ApplicationUser.LogIn(user, UserManager, RoleManager, AuthenticationManager);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePasswordbyID(ChangePasswordViewModel model, string userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(userID, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -244,16 +275,15 @@ namespace TestWeb.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Manage/SetPassword
+        [Authorize]
+        [HttpGet]
         public ActionResult SetPassword()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/SetPassword
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SetPassword(SetPasswordViewModel model)
         {
@@ -276,8 +306,7 @@ namespace TestWeb.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Manage/ManageLogins
+        [Authorize]
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -299,8 +328,7 @@ namespace TestWeb.Controllers
             });
         }
 
-        //
-        // POST: /Manage/LinkLogin
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
@@ -309,8 +337,7 @@ namespace TestWeb.Controllers
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
-        //
-        // GET: /Manage/LinkLoginCallback
+        [Authorize]
         public async Task<ActionResult> LinkLoginCallback()
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
@@ -320,6 +347,70 @@ namespace TestWeb.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangeUserName()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUserName(ChangeUserNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            user.UserName = model.NewUserName.ToString();
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                if (user != null)
+                {
+                    await ApplicationUser.LogIn(user, UserManager, RoleManager, AuthenticationManager);
+                }
+                
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeUserNameSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmailViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            EmailSender.Sender(model.NewEmail, 2, 2, "");
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            user.Email = model.NewEmail;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                if (user != null)
+                {
+                    await ApplicationUser.LogIn(user, UserManager, RoleManager, AuthenticationManager);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeEmailSuccess });
+            }
+            AddErrors(result);
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)
@@ -333,7 +424,7 @@ namespace TestWeb.Controllers
             base.Dispose(disposing);
         }
 
-#region Aplicaciones auxiliares
+        #region Aplicaciones auxiliares
         // Se usan para protección XSRF al agregar inicios de sesión externos
         private const string XsrfKey = "XsrfId";
 
@@ -381,7 +472,9 @@ namespace TestWeb.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            ChangeUserNameSuccess,
+            ChangeEmailSuccess
         }
 
 #endregion

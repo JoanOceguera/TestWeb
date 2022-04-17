@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Model.Entities.Cuentas>
+
+@{
+    ViewBag.Title = "Cuentas";
+}
+
+<h2>Cuentas</h2>
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.exp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.validez)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre_usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rolpc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tpers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.carneId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.activo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.exp)
+                </td>
+                <td class="col-2">
+                    @if (!(item.validez != null))
+                    {
+                        <label>Mientras mantenga vínculo laboral</label>
+                    }
+                    else
+                    {
+                        <label>@item.validez</label>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre_usuario)
+                </td>
+                <td>
+                    @switch (item.rolpc)
+                    {
+                        default:
+                            <label>Usuario Avanzado</label>
+                            break;
+                        case ("a"):
+                            <label>Administrador</label>
+                            break;
+                        case ("u"):
+                            <label>Usuario</label>
+                            break;
+                    }
+                 </td>
+                 <td>
+                     @switch (item.tpers)
+                     {
+                         default:
+                             <label>Técnico</label>
+                             break;
+                         case ("d"):
+                             <label>Dirigente</label>
+                             break;
+                         case ("e"):
+                             <label>Especialista</label>
+                             break;
+                         case ("o"):
+                            <label>Otro</label>
+                             break;
+                     }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.carneId)
+                </td>
+                <td>
+                    @if ((bool)item.activo)
+                    {
+                        <label>Si</label>
+                    }
+                    else
+                    {
+                        <label>No</label>
+                    }
+                </td>
+                <td>
+                    @if ((bool)item.activo)
+                            {
+                        <a href="~/Cuentas/Delete/@item.id" title="Desactivar" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-minus"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="~/Cuentas/Activar/@item.id" title="Activar" class="btn btn-success">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="~/Administracion/" title="Administración" class="btn btn-secondary">
+    <i class="glyphicon glyphicon-arrow-left"></i>
+</a>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('.table').DataTable();
+    });
+</script>
+

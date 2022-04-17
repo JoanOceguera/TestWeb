@@ -9,23 +9,23 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TestWeb.Models;
+using Model;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Mail;
+using Model.Entities;
 
 namespace TestWeb.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
+        private IncideEntities incideData = new IncideEntities();
 
         public AccountController()
         {
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -52,6 +52,18 @@ namespace TestWeb.Controllers
             }
         }
 
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
+            }
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -73,22 +85,28 @@ namespace TestWeb.Controllers
                 return View(model);
             }
 
-            // No cuenta los errores de inicio de sesión para el bloqueo de la cuenta
-            // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            var currentUser = UserManager.FindByName(model.UserName);
+
+            if (currentUser == null)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Intento de inicio de sesión no válido.");
-                    return View(model);
+                ModelState.AddModelError("", "Introduzca un usuario válido");
+                return View(model);
             }
+            if (!currentUser.activo)
+            {
+                ModelState.AddModelError("", "El usuario ha sido desactivado, por favor escoja otro");
+                return View(model);
+            }
+
+            if (!UserManager.CheckPassword(currentUser, model.Password))
+            {
+                ModelState.AddModelError("", "Contraseña Incorrecta");
+                return View(model);
+            }
+
+            await ApplicationUser.LogIn(currentUser, UserManager, RoleManager, AuthenticationManager);
+
+            return RedirectToLocal(returnUrl);
         }
 
         //
@@ -136,39 +154,48 @@ namespace TestWeb.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult Register()
         {
+            ViewBag.roles = RoleManager.Roles.ToList();
+            IncideEntities incideData = new IncideEntities();
+            ViewBag.area = incideData.Area.OrderBy(x => x.descripcion).ToList();
             return View();
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                
+                EmailSender.Sender(model.Email, 1, 1, "");
+                RecursosHumanosEntities rhData = new RecursosHumanosEntities();
+                string carneId = (await rhData.Personal.FindAsync(model.exp)).CarneId;
+                var user = new ApplicationUser { UserName = model.UserName.ToString(), Email = model.Email, exp = model.exp, area = model.area, carneId = carneId};
+                user.activo = true;
+                var userRole = new ApplicationUserRole { UserId = user.Id, RoleId = model.rolId };
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Enviar correo electrónico con este vínculo
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-
+                    using (var ctx = new ApplicationDbContext())
+                    {
+                        ctx.ApplicationUserRole.Add(userRole);
+                        ctx.SaveChanges();
+                    }
                     return RedirectToAction("Index", "Home");
+                    
                 }
+                
                 AddErrors(result);
             }
-
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
+            ViewBag.roles = RoleManager.Roles.ToList();
+            ViewBag.area = incideData.Area.ToList();
             return View(model);
         }
 
@@ -183,6 +210,12 @@ namespace TestWeb.Controllers
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        public ActionResult Error(string message)
+        {
+            ViewBag.message = message;
+            return View("Error");
         }
 
         //
@@ -232,9 +265,9 @@ namespace TestWeb.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword()
         {
-            return code == null ? View("Error") : View();
+            return View();
         }
 
         //
@@ -248,18 +281,23 @@ namespace TestWeb.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null)
+            var user = await UserManager.FindByNameAsync(model.UserName);
+            if (user == null || !user.activo)
             {
                 // No revelar que el usuario no existe
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
+            var hasPassword = await UserManager.HasPasswordAsync(user.Id);
+            if (hasPassword)
+            {
+                var resultRemove = await UserManager.RemovePasswordAsync(user.Id);
+            }
+            var resultChange = await UserManager.AddPasswordAsync(user.Id, "Cie$" + DateTime.Now.Year);
+            if (resultChange.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            AddErrors(result);
+            AddErrors(resultChange);
             return View();
         }
 
